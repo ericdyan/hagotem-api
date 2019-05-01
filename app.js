@@ -131,23 +131,10 @@ app.patch('/api/users/:id', function(request, response) {
   }, () => {
     response.status(404).send();
   });
-  // let { email } = request.body;
-  // Users.findOne({
-  //   where: {
-  //     email: email
-  //   }
-  // }).then((user) => {
-  //   response.status(422).json(user);
-  // }, () => {
-  //
-  // });
 
 
 });
 
-// Needs work!!!!!!
-
-// Fix nested promises
 // Delete request to delete single user (deletes associated tables first)
 app.delete('/api/users/:id', function(request, response) {
   let { id } = request.params;
@@ -190,47 +177,5 @@ app.delete('/api/users/:id', function(request, response) {
 	    response.status(404).send();
     });
   });
-// Patch request to edit individual user email
 
-
-
-
-
-
-// Using Knex
-// app.get('/api/users', function(request, response) {
-//   let connection = knex({
-//     client: 'sqlite3',
-//     connection: {
-//       filename: 'hagotem.db'
-//     }
-//   });
-//   connection.select().from('users_info').then((users) => {
-//     response.json(users);
-//   });
-// });
-// app.get('/api/users/:id', function(request, response) {
-//   let id = request.params.id;
-//   console.log(id);
-//   let connection = knex({
-//     client: 'sqlite3',
-//     connection: {
-//       filename: 'hagotem.db'
-//     }
-//   });
-//   connection
-//     .select()
-//     .from('users_info')
-//     .where('id', id)
-//     .first()
-//     .then((user) => {
-//       if (user) {
-//         response.json(user);
-//       } else {
-//         response.status(404).json({
-//           error: `User ${id} not found`
-//         });
-//       }
-//     });
-// });
 app.listen(process.env.PORT || 4000);
