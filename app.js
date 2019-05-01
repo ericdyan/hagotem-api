@@ -156,20 +156,58 @@ app.delete('/api/users/:id', function(request, response) {
       user_id: id
     }
   }).then((userInfo) => {
-    userInfo.destroy().then(() => {
-      Address.findByPk(id).then((address) => {
-        address.destroy().then(() => {
-          Users.findByPk(id).then((user) => {
-            user.destroy().then(() => {
-              response.status(204).send();
-            }, () => {
-              response.status(404).send();
-            });
-          });
-        });
-      });
-    });
+    if (userInfo) {
+      return userInfo.destroy();
+    } else {
+      return Promise.reject();
+    }
+  })
+  .then(() => {
+    Address.findByPk(id).then((address) => {
+      if (address) {
+        return address.destroy();
+      } else {
+        return Promise.reject();
+      }
+    })
+    .then(() => {
+      Users.findByPk(id).then((user) => {
+        if (user) {
+          return user.destroy();
+        } else {
+          return Promise.reject();
+        }
+      })
+      .then(() => {
+        response.status(204).send();
+      }, () => {
+        response.status(404).send();
+      })
+    }, () => {
+      response.status(404).send();
+    })
+  }, () => {
+    response.status(404).send();
   });
+  // Userinfo.findOne({
+  //   where: {
+  //     user_id: id
+  //   }
+  // }).then((userInfo) => {
+  //   userInfo.destroy().then(() => {
+  //     Address.findByPk(id).then((address) => {
+  //       address.destroy().then(() => {
+  //         Users.findByPk(id).then((user) => {
+  //           user.destroy().then(() => {
+  //             response.status(204).send();
+  //           }, () => {
+  //             response.status(404).send();
+  //           });
+  //         });
+  //       });
+  //     });
+  //   });
+  // });
 });
 // Patch request to edit individual user email
 
