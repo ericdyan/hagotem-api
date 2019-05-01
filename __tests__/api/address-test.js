@@ -16,6 +16,3 @@ it('should create an address', () => {
     .expect('json', 'address1', 'ADDRESS1')
     .expect('jsonTypes', 'id', Joi.number().required());
 });
-it('should work', () => {
-
-});

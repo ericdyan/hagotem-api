@@ -93,8 +93,8 @@ app.post('/api/addresses', function(request, response) {
     city: request.body.city,
     state: request.body.state,
     zipCode: request.body.zipCode
-  }).then((user) => {
-    response.json(user)
+  }).then((address) => {
+    response.json(address);
   }, (validation) => {
     response.status(422).json({
       errors: validation.errors.map((error) => {
@@ -156,21 +156,40 @@ app.delete('/api/users/:id', function(request, response) {
       user_id: id
     }
   }).then((userInfo) => {
-    userInfo.destroy().then(() => {
-      Address.findByPk(id).then((address) => {
-        address.destroy().then(() => {
-          Users.findByPk(id).then((user) => {
-            user.destroy().then(() => {
-              response.status(204).send();
-            }, () => {
-              response.status(404).send();
-            });
-          });
-        });
-      });
+    if (userInfo) {
+	      return userInfo.destroy();
+	    } else {
+	      return Promise.reject();
+	    }
+	  })
+	  .then(() => {
+	    Address.findByPk(id).then((address) => {
+	      if (address) {
+	        return address.destroy();
+	      } else {
+	        return Promise.reject();
+	      }
+	    })
+	    .then(() => {
+	      Users.findByPk(id).then((user) => {
+	        if (user) {
+	          return user.destroy();
+	        } else {
+	          return Promise.reject();
+	        }
+	      })
+	      .then(() => {
+	        response.status(204).send();
+	      }, () => {
+	        response.status(404).send();
+	      })
+	    }, () => {
+	      response.status(404).send();
+	    })
+	  }, () => {
+	    response.status(404).send();
     });
   });
-});
 // Patch request to edit individual user email
 
 
