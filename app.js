@@ -178,4 +178,16 @@ app.delete('/api/users/:id', function(request, response) {
     });
   });
 
+  // Routes for iOS development class
+  let captions = {
+    "caption" : "Thanks Professor Spartak",
+    "caption1" : "Semester went by 'swiftly'",
+    "caption2" : "ITP 344 is the best",
+    "caption3" : "Hulu has live sports"
+  };
+  app.get('/api/instaCaption', function(request, response) {
+    response.json(captions);
+  });
+
+
 app.listen(process.env.PORT || 4000);
